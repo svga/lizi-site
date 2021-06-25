@@ -19413,7 +19413,7 @@ v6:function(a){var s
 if(P.a1C(a).gL5())return P.MY(C.nk,a,C.a5,!1)
 s=this.gVg()
 if(s==null)s=""
-return P.MY(C.nk,s+("assets/"+a),C.a5,!1)},
+return P.MY(C.nk,s+("https://cdn.jsdelivr.net/gh/svga/lizi-site@master/build/web/assets/"+a),C.a5,!1)},
 df:function(a,b){return this.a7o(a,b)},
 a7o:function(a,b){var s=0,r=P.a4(t.V4),q,p=2,o,n=[],m=this,l,k,j,i,h,g,f,e
 var $async$df=P.a_(function(c,d){if(c===1){o=d
