@@ -30,6 +30,9 @@ class __EditorParticleInspectorState extends State<_EditorParticleInspector> {
         _renderAccelerationX(),
         _renderAccelerationY(),
         Container(),
+        _renderAlphaSpeed(),
+        _renderAlphaRange(),
+        Container(),
         _renderScale(),
         _renderScaleSpeed(),
         _renderScaleRange(),
@@ -154,7 +157,7 @@ class __EditorParticleInspectorState extends State<_EditorParticleInspector> {
           height: 32,
           alignment: Alignment.bottomLeft,
           child: Text(
-            'BirthRate - 发射频率',
+            'BirthRate - 粒子生成速率',
             style: TextStyle(
               fontSize: 11,
               color: Color.fromARGB(255, 34, 34, 34),
@@ -348,6 +351,64 @@ class __EditorParticleInspectorState extends State<_EditorParticleInspector> {
                 widget.activeCell.acceleration.dx,
                 double.tryParse(value) ?? 0.0,
               );
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  Column _renderAlphaSpeed() {
+    return Column(
+      children: [
+        Container(
+          height: 32,
+          alignment: Alignment.bottomLeft,
+          child: Text(
+            'Alpha Speed - 不透明度变化速度',
+            style: TextStyle(
+              fontSize: 11,
+              color: Color.fromARGB(255, 34, 34, 34),
+            ),
+            maxLines: 1,
+          ),
+        ),
+        TextField(
+          controller: TextEditingController(
+            text: widget.activeCell.alphaSpeed.toString(),
+          ),
+          onSubmitted: (value) {
+            setState(() {
+              widget.activeCell.alphaSpeed = double.tryParse(value) ?? 0.0;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  Column _renderAlphaRange() {
+    return Column(
+      children: [
+        Container(
+          height: 32,
+          alignment: Alignment.bottomLeft,
+          child: Text(
+            'Alpha Range - 不透明度变化范围',
+            style: TextStyle(
+              fontSize: 11,
+              color: Color.fromARGB(255, 34, 34, 34),
+            ),
+            maxLines: 1,
+          ),
+        ),
+        TextField(
+          controller: TextEditingController(
+            text: widget.activeCell.alphaRange.toString(),
+          ),
+          onSubmitted: (value) {
+            setState(() {
+              widget.activeCell.alphaRange = double.tryParse(value) ?? 0.0;
             });
           },
         ),
