@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Lizi - 可快速落地的粒子动画解决方案',
       theme: ThemeData(
         primaryColor: Color(0xff0352a4),
         primarySwatch: Colors.blue,

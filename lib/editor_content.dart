@@ -105,7 +105,26 @@ class __EditorContentState extends State<_EditorContent>
   }
 
   Widget _renderFileUploader() {
-    return Container();
+    return Container(
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: MaterialButton(
+          onPressed: () async {
+            FilePickerResult? result = await FilePicker.platform.pickFiles();
+            if (result != null && result.files.first.bytes != null) {
+              nextContent =
+                  await decodeImageFromList(result.files.first.bytes!);
+              nextContentBase64 = base64.encode(result.files.first.bytes!);
+              setState(() {});
+            }
+          },
+          height: 88,
+          child: Text(
+            '点击上传图片',
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _renderOnlineDesigner() {

@@ -45,7 +45,7 @@ class _HomeIntroWidget extends StatelessWidget {
       children: [
         SizedBox(width: 12),
         Container(
-          width: 400,
+          width: 440,
           child: _renderTexts(context),
         ),
         Expanded(
@@ -126,7 +126,7 @@ class _HomeIntroWidget extends StatelessWidget {
         ),
         SizedBox(height: 5),
         Text(
-          '可快速落地的粒子动画库',
+          '可快速落地的粒子动画解决方案',
           style: TextStyle(
             fontSize: 30,
             color: Color.fromARGB(255, 34, 34, 34),

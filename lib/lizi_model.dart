@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:lizi/lizi.dart';
 
-class LiziModel {
-  final List<Emitter> emitters = [];
-
-  static LiziModel blankModel() {
-    final model = LiziModel();
+class LiziModel extends LafItem {
+  static LafItem blankModel() {
+    final model = LafItem();
     model.emitters.add(blankEmitter());
     return model;
   }

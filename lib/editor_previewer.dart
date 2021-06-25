@@ -1,7 +1,7 @@
 part of './editor.dart';
 
 class _EditorPreviewer extends StatefulWidget {
-  final LiziModel liziModel;
+  final LafItem liziModel;
 
   _EditorPreviewer({Key? key, required this.liziModel}) : super(key: key);
 
@@ -59,7 +59,7 @@ class __EditorPreviewerState extends State<_EditorPreviewer>
 }
 
 class _EditorPreviewerPainter extends CustomPainter {
-  final LiziModel liziModel;
+  final LafItem liziModel;
 
   _EditorPreviewerPainter(this.liziModel);
 

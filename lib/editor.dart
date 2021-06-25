@@ -2,14 +2,17 @@ library editor;
 
 import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:lizi/lizi.dart';
 import 'package:lizi_site/app_bar.dart';
 import 'package:lizi_site/lizi_model.dart';
+import 'package:file_picker/file_picker.dart';
 
 import 'bottom_bar.dart';
+import 'file_saver.dart' if (dart.library.js) 'file_saver_js.dart';
 
 part './editor_emitter.dart';
 part './editor_particle.dart';
@@ -43,7 +46,7 @@ class _EditorSekeleton extends StatefulWidget {
 }
 
 class __EditorSekeletonState extends State<_EditorSekeleton> {
-  LiziModel? liziModel;
+  LafItem? liziModel;
 
   @override
   void initState() {
@@ -63,7 +66,15 @@ class __EditorSekeletonState extends State<_EditorSekeleton> {
           _EditorPreviewer(liziModel: liziModel!),
           SizedBox(width: 66),
           Expanded(
-            child: _EditorInspector(liziModel!),
+            child: _EditorInspector(
+              liziModel!,
+              key: Key(liziModel!.hashCode.toString()),
+              onNewLiziModel: (value) {
+                setState(() {
+                  liziModel = value;
+                });
+              },
+            ),
           ),
         ],
       ),
@@ -72,9 +83,11 @@ class __EditorSekeletonState extends State<_EditorSekeleton> {
 }
 
 class _EditorInspector extends StatefulWidget {
-  final LiziModel liziModel;
+  final LafItem liziModel;
+  final Function(LafItem) onNewLiziModel;
 
-  _EditorInspector(this.liziModel);
+  _EditorInspector(this.liziModel, {Key? key, required this.onNewLiziModel})
+      : super(key: key);
 
   @override
   __EditorInspectorState createState() => __EditorInspectorState();
@@ -116,24 +129,37 @@ class __EditorInspectorState extends State<_EditorInspector>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TabBar(
-            tabs: [
-              Tab(
-                child: Container(
-                  height: 44,
-                  child: _renderEmitterButton(),
+          Row(
+            children: [
+              Expanded(
+                child: TabBar(
+                  tabs: [
+                    Tab(
+                      child: Container(
+                        height: 44,
+                        child: _renderEmitterButton(),
+                      ),
+                    ),
+                    ...activeEmitter!.cells
+                        .asMap()
+                        .keys
+                        .map((e) => Tab(text: '粒子 - $e')),
+                  ],
+                  isScrollable: true,
+                  indicatorColor: Color.fromARGB(128, 0, 59, 153),
+                  labelColor: Color.fromARGB(255, 34, 34, 34),
+                  unselectedLabelColor: Color.fromARGB(100, 34, 34, 34),
+                  controller: _tabController,
                 ),
               ),
-              ...activeEmitter!.cells
-                  .asMap()
-                  .keys
-                  .map((e) => Tab(text: '粒子 - $e')),
+              MaterialButton(
+                onPressed: () {
+                  _showSettingMenu();
+                },
+                height: 54,
+                child: Icon(Icons.settings),
+              ),
             ],
-            isScrollable: true,
-            indicatorColor: Color.fromARGB(128, 0, 59, 153),
-            labelColor: Color.fromARGB(255, 34, 34, 34),
-            unselectedLabelColor: Color.fromARGB(100, 34, 34, 34),
-            controller: _tabController,
           ),
           Expanded(
             child: TabBarView(
@@ -148,6 +174,74 @@ class __EditorInspectorState extends State<_EditorInspector>
           ),
         ],
       ),
+    );
+  }
+
+  void _onExport() {
+    final data = widget.liziModel.encode();
+    FileSaver.saveFile(Uint8List.fromList(utf8.encode(data)),
+        'laf_${Random().nextInt(9999999)}.json');
+  }
+
+  void _onImport() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null && result.files.first.bytes != null) {
+      final fileContent = utf8.decode(result.files.first.bytes!);
+      final fileModel = LafItem.decodeFromString(fileContent);
+      widget.onNewLiziModel(fileModel);
+    }
+  }
+
+  void _showSettingMenu() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Container(
+            width: 300,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    _onExport();
+                  },
+                  title: Text(
+                    '导出 JSON 文件',
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    _onImport();
+                  },
+                  title: Text(
+                    '导入 JSON 文件',
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    widget.onNewLiziModel(LiziModel.blankModel());
+                  },
+                  title: Text(
+                    '重置',
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  title: Text(
+                    '取消',
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

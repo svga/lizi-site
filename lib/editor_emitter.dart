@@ -1,7 +1,7 @@
 part of './editor.dart';
 
 class _EditorEmitterInspector extends StatefulWidget {
-  final LiziModel model;
+  final LafItem model;
   final Emitter activeEmitter;
   final Function onDelete;
 
