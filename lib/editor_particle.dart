@@ -61,7 +61,17 @@ class __EditorParticleInspectorState extends State<_EditorParticleInspector> {
           borderRadius: BorderRadius.circular(8),
         ),
         child: MaterialButton(
-          onPressed: () {},
+          onPressed: () async {
+            final nextContent = await showDialog(
+              context: context,
+              builder: (context) {
+                return _EditorContent(cell: widget.activeCell);
+              },
+            );
+            if (nextContent is ui.Image) {
+              widget.activeCell.contents = nextContent;
+            }
+          },
           height: 44,
           minWidth: 220,
           child: Text('修改粒子纹理'),

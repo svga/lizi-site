@@ -1,6 +1,8 @@
 library editor;
 
+import 'dart:convert';
 import 'dart:math';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:lizi/lizi.dart';
@@ -12,6 +14,7 @@ import 'bottom_bar.dart';
 part './editor_emitter.dart';
 part './editor_particle.dart';
 part './editor_previewer.dart';
+part './editor_content.dart';
 
 class MyEditorPage extends StatelessWidget {
   @override
@@ -154,7 +157,7 @@ class __EditorInspectorState extends State<_EditorInspector>
       activeEmitter: activeEmitter!,
       onDelete: () {
         if (widget.liziModel.emitters.length <= 1) {
-          final snackBar = SnackBar(content: Text('不能删除最该发射器（至少保留一个发射器）'));
+          final snackBar = SnackBar(content: Text('不能删除该发射器（至少保留一个发射器）'));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           return;
         }
@@ -179,7 +182,7 @@ class __EditorInspectorState extends State<_EditorInspector>
       },
       onDelete: () {
         if (activeEmitter!.cells.length <= 1) {
-          final snackBar = SnackBar(content: Text('不能删除最该粒子（至少保留一个粒子）'));
+          final snackBar = SnackBar(content: Text('不能删除该粒子（至少保留一个粒子）'));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           return;
         }
